@@ -18,10 +18,13 @@
 - every time the buttons are clicked, an event is dispatched
 - extension/content.js listens to these events on the text.html page 
 - extension/content.js retrieves data from the local storage then passes this to background.js 
-- extension/background.js listens if the user navigates to a different tab or if a tab is updated. if the url of the tab matches one of the blocked sites, it will replace the url with /blocked.html 
+- extension/background.js listens if it receives messages from content.js. it modifies the extension behavior depending on the message state
+- if the state is 'start', extension/background.js listens if the user navigates to a different tab or if a tab is updated. if the url of the tab matches one of the blocked sites, it will replace the url with /blocked.html 
+- if the state is 'end', it will remove its ability to listen to tab events 
 
 ## notes 
 - the scope of content.js is limited to text.html
 - background.js encompasses the browser 
 - time functionality not working. not updated yet
 - url links only match to the exact given urls. not updated yet
+- pause button not updated yet
