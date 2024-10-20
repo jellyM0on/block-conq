@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onClick="startTimer()">Start Timer</button>
+    <p>Timer: <span id="timer">0</span></p>
+    <button onClick="pauseTimer()">Pause Timer</button>
+    <button onClick="endTimer()">End Timer</button>
+
+    <p>Blocked Sites</p>
+
+    <label for="add-site">Add Site</label>
+    <input type="text" id="add-site">
+    <button onClick="addSite()">Add</button>
+
+    <ul id="site-list">
+    
+    </ul>
+</body>
+</html>
+
+<script>
+    //local storage 
+    localStorage.setItem("blockedSites", JSON.stringify([])); 
+    localStorage.setItem("startTime", 0); 
+    // localStorage.setItem("isTimerOn", 0); 
+
+    let timerInterval; 
+    let currentTime = 0; 
+
+    const timer = document.getElementById("timer"); 
+
+    function startTimer(){
+        localStorage.startTime = currentTime; 
+        // localSorage.isTimerOn = 1; 
+        window.dispatchEvent(new StorageEvent("updateTime", {
+            key: 'start'
+        }));
+        incrementTimer(); 
+    }
+
+    function incrementTimer(startTime){
+        timerInterval = setInterval(() => {
+            currentTime = Number(timer.textContent) + 1; 
+            timer.textContent = currentTime; 
+        }, 1000)
+    }
+
+    function pauseTimer(){
+        localStorage.startTime = currentTime; 
+        // localSorage.isTimerOn = 0;
+        window.dispatchEvent(new StorageEvent("updateTime", {
+            key: 'pause'
+        }));
+        clearInterval(timerInterval); 
+    }
+
+    function endTimer(){
+        localStorage.startTime = 0; 
+        // localSorage.isTimerOn = 0;
+        window.dispatchEvent(new StorageEvent("updateTime", {
+             key: 'end'
+        }));
+        clearInterval(timerInterval); 
+        currentTime = 0; 
+        timer.textContent = currentTime; 
+    }
+
+    let sites = [];
+    //sites
+    function addSite(){
+        const input = document.querySelector("#add-site"); 
+        const siteUrl = input.value; 
+        
+        const list = document.querySelector("#site-list"); 
+        const newSite = document.createElement('li'); 
+        newSite.textContent = siteUrl; 
+        list.appendChild(newSite); 
+
+        sites.push(siteUrl)
+
+        localStorage.blockedSites = JSON.stringify(sites);
+        // window.dispatchEvent(new StorageEvent("updateSites"));
+    }
+</script>

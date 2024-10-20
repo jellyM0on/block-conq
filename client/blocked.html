@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Site Blocked!</title>
+</head>
+<body>
+  <h1>Site Blocked!</h1>
+  <p>You are not allowed to access this site.</p>
+  <p>Current time: <span id="timer"></span></p>
+
+  <script>
+    let startTime; 
+    document.addEventListener('DOMContentLoaded', () => {
+        chrome.storage.local.get('startTime', (data) => {
+            startTime = data.startTime; 
+        })
+    })
+
+    let currentTime = startTime; 
+
+    const timer = document.querySelector('#timer'); 
+    timerInterval = setInterval(() => {
+            currentTime += 1
+            timer.textContent = currentTime; 
+        }, 1000)
+   
+  </script>
+</body>
+</html>
